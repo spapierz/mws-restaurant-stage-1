@@ -1,4 +1,4 @@
-var CACHE_NAME = 'cache-v1';
+var cache_version = 'restaurant-v1';
 
 var cachedUrls = [
 	'/', 
@@ -23,7 +23,7 @@ var cachedUrls = [
 
 self.addEventListener('install', event => {
 	event.waitUntil(
-		caches.open(CACHE_NAME) 
+		caches.open(cache_version) 
 			.then(function(cache) {
 				return cache.addAll(cachedUrls);
 			}
@@ -33,10 +33,10 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
 	event.waitUntil(
-		caches.keys().then(cacheName => {
+		caches.keys().then(cached_name => {
 			return Promise.all(
-				cacheName.filter(new_name => {
-					return new_name !== CACHE_NAME; 
+				cached_name.filter(new_name => {
+					return new_name !== cache_version; 
 				}).map(new_name => {
 					return caches.delete(new_name);
 				})
