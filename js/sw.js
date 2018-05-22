@@ -1,3 +1,8 @@
+/* 
+	some of this code has been borrowed from to help with updating the cache and clearing old caches. 
+	https://medium.com/7gravity/service-workers-for-dummies-b28e09820ba6
+*/ 
+
 var CACHE_NAME = 'cache-v1';
 
 var cachedUrls = [
