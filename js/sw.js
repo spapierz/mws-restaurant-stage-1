@@ -1,8 +1,3 @@
-/* 
-	some of this code has been borrowed from to help with updating the cache and clearing old caches. 
-	https://medium.com/7gravity/service-workers-for-dummies-b28e09820ba6
-*/ 
-
 var CACHE_NAME = 'cache-v1';
 
 var cachedUrls = [
@@ -36,20 +31,14 @@ self.addEventListener('install', event => {
 	);
 });
 
-self.addEventListener('install', event => {
-	self.skipWaiting();
-
-	event.waitUntil(CACHE_NAME)
-});
-
 self.addEventListener('activate', event => {
 	event.waitUntil(
-		caches.keys().then(function(cacheName) {
+		caches.keys().then(cacheName => {
 			return Promise.all(
-				cacheName.filter(function(name) {
-					return name !== CACHE_NAME; 
-				}).map(function(name) {
-					return caches.delete(name);
+				cacheName.filter(new_name => {
+					return new_name !== CACHE_NAME; 
+				}).map(new_name => {
+					return caches.delete(new_name);
 				})
 			)
 		})
@@ -60,11 +49,7 @@ self.addEventListener('fetch', event => {
 	event.respondWith(
 		caches.match(event.request)
 			.then(response => {
-				// Cache hit - return response
-				if (response) {
-					return response;
-				}
-				return fetch(event.request);
+				return response || fetch(event.request);
 			}
 		)
 	);
